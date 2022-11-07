@@ -1,0 +1,84 @@
+class UF {
+public:
+    vector<int> fa;
+    vector<int> sz;
+    int n;
+    int comp_cnt;
+
+public:
+    explicit UF(int _n): n(_n), comp_cnt(_n), fa(_n), sz(_n, 1) {
+        iota(fa.begin(), fa.end(), 0); // fa[i]=i.
+    }
+
+    int findset(int x) { // return the representative element of the set which contains x.
+        return fa[x] == x ? x : fa[x] = findset(fa[x]);
+    }
+
+    void unite(int x, int y) { // unite the two sets that contains x and y, respectively.
+        if (sz[x] < sz[y]) {
+            swap(x, y);
+        }
+        fa[y] = x;
+        sz[x] += sz[y];
+        --comp_cnt;
+    }
+
+    bool findAndUnite(int x, int y) {
+        int x0 = findset(x);
+        int y0 = findset(y);
+        if (x0 != y0) { // x and y are not in the same set, then unite the two sets.
+            unite(x0, y0);
+            return true;
+        }
+        return false; // in the same set
+    }
+
+    int numOfComponents() const{
+        return comp_cnt;
+    }
+
+};
+
+
+
+
+
+
+
+class UF {
+public:
+    unordered_map<int, int> fa, sz;
+    int comp_cnt = 0;
+
+public:
+    int findset(int x) { // return the representative element of the set which contains x.
+        if (!fa.count(x)) { // insert node x
+            ++comp_cnt;
+            return fa[x] = x;
+        }
+        return fa[x] == x ? x : fa[x] = findset(fa[x]);
+    }
+
+    void unite(int x, int y) { // unite the two sets that contains x and y, respectively.
+        if (sz[x] < sz[y]) {
+            swap(x, y);
+        }
+        fa[y] = x;
+        sz[x] += sz[y];
+        --comp_cnt;
+    }
+
+    bool findAndUnite(int x, int y) {
+        int x0 = findset(x);
+        int y0 = findset(y);
+        if (x0 != y0) { // x and y are not in the same set, then unite the two sets.
+            unite(x0, y0);
+            return true;
+        }
+        return false; // in the same set
+    }
+
+    int numOfComponents() const{
+        return comp_cnt;
+    }
+};

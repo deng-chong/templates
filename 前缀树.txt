@@ -1,0 +1,53 @@
+struct TrieNode{
+    bool isEnd=false;
+    char c;
+    TrieNode* next[26];
+    TrieNode(char _c=' '):c(_c){
+        for(int i=0;i<26;++i)
+            next[i]=nullptr;
+    }
+};
+class Trie {
+    TrieNode* root;
+public:
+    /** Initialize your data structure here. */
+    Trie() {
+        root = new TrieNode();
+    }
+    
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        TrieNode *p=root;
+        for(int i=0;i<word.size();++i){
+            if(p->next[word[i]-'a']==nullptr){
+                p->next[word[i]-'a'] = new TrieNode(word[i]);
+            }
+            p = p->next[word[i]-'a'];
+        }
+        p->isEnd = true;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        TrieNode *p = root;
+        for(int i=0;i<word.size();++i){
+            p = p->next[word[i]-'a'];
+            if(p==nullptr){
+                return false;
+            }
+        }
+        return p->isEnd;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        TrieNode *p = root;
+        for(int i=0;i<prefix.size();++i){
+            p = p->next[prefix[i]-'a'];
+            if(p==nullptr){
+                return false;
+            }
+        }
+        return true;
+    }
+};

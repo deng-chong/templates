@@ -1,0 +1,15 @@
+class NumTree{
+private:
+    int n;
+    vector<int> t;
+public:
+    TreeNum(int _n): n(_n), t(_n+1){}
+    int query(int x){
+        int res=0;
+        for(; x; x-=(x&-x)) res+=t[x];
+        return res;
+    }
+    void add(int x, int val){
+        for(; x<=n; x+=(x&-x)) t[x]+=val;
+    }
+};

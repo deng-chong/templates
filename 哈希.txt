@@ -1,0 +1,52 @@
+struct VectorHasher {
+    size_t operator()(const vector<int>& vec) const {
+        size_t hash = vec.size();
+        for (int x : vec) {
+            hash ^= x + 0x9e3779b9 + (hash << 6) + (hash >> 2);
+        }
+        return hash;
+    }
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+struct hash_pair { 
+    template <class T1, class T2> 
+    size_t operator()(const pair<T1, T2>& p) const
+    { 
+        auto hash1 = hash<T1>{}(p.first); 
+        auto hash2 = hash<T2>{}(p.second); 
+        return hash1 ^ hash2; 
+    } 
+}; 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+class StringHash {
+    vector<unsigned long long> p, h;
+    const unsigned int P = 1313131;
+public:
+    StringHash(const string& s = "") {
+        int n = s.size();
+        p.resize(n + 1, 0), h.resize(n + 1, 0);
+        p[0] = 1;
+        for (int i = 0; i < n; ++i) {
+            p[i + 1] = p[i] * P;
+            h[i + 1] = h[i] * P + s[i];
+        }
+    }
+
+    void hash(const string& s) {
+        int n = s.size();
+        p.resize(n + 1, 0), h.resize(n + 1, 0);
+        p[0] = 1;
+        for (int i = 0; i < n; ++i) {
+            p[i + 1] = p[i] * P;
+            h[i + 1] = h[i] * P + s[i];
+        }
+    }
+
+    long long query(int i, int j) {//s[i:j]
+         return h[j + 1] - h[i] * p[j - i + 1];
+    }
+};
